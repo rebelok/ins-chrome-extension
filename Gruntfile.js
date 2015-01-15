@@ -108,7 +108,8 @@ module.exports = function (grunt) {
     jshint: {
       options: {
         jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
+        reporter: require('jshint-stylish'),
+        ignores: ['<%= config.app %>/scripts/gmail.js','<%= config.app %>/scripts/main.js']
       },
       all: [
         'Gruntfile.js',

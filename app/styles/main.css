@@ -1,0 +1,29 @@
+.bins-avatar_img {
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+}
+
+.bins-link_green {
+  border: 3px solid #80bd01;
+}
+.bins-link_blue{
+  border:3px solid #56a3dd
+}
+.bins-link_gray{
+  border:3px solid #e2ebed;
+}
+ .bins-h2-name {
+  border-bottom: 1px solid #e0e6e8;
+}
+.bins-h2 {
+  font-size: 18px;
+  font-weight: normal;
+  color: #222;
+  margin: 0 0 5px;
+  padding: 5px;
+}
+.bins-person_link{
+color: #34658e;
+  text-decoration: none;
+}

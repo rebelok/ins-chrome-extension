@@ -1,6 +1,11 @@
 {
   "name": "insightful-extension",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "dustjs": "~0.3.0",
+    "dustjs-linkedin": "~2.5.1",
+    "dustjs-linkedin-helpers": "~1.5.0"
+  },
   "devDependencies": {}
 }
