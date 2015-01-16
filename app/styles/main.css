@@ -3,19 +3,21 @@
   -moz-border-radius: 100%;
   border-radius: 100%;
 }
+.bins-connection .bins-avatar_img{
+  max-width: 35px;
+  max-height: 35px;
+}
 
-.bins-link_green {
+.greens {
   border: 3px solid #80bd01;
 }
-.bins-link_blue{
+.blues{
   border:3px solid #56a3dd
 }
-.bins-link_gray{
+.grays{
   border:3px solid #e2ebed;
 }
- .bins-h2-name {
-  border-bottom: 1px solid #e0e6e8;
-}
+
 .bins-h2 {
   font-size: 18px;
   font-weight: normal;
@@ -23,7 +25,48 @@
   margin: 0 0 5px;
   padding: 5px;
 }
+.bins-h2-name {
+  border-bottom: 1px solid #e0e6e8;
+}
+.bins-h2-position{
+  font-size: 13px ;
+}
 .bins-person_link{
-color: #34658e;
+  color: #34658e;
   text-decoration: none;
+}
+.bins-company_link{
+  padding: 0 0 0 5px;
+
+}
+.bins-email {
+  padding: 0 0 0 5px;
+}
+.bins-email_link{
+  color: gray;
+  word-wrap: break-word;
+  font-size: 12px;
+}
+.bins-email_link:hover{
+  color: #222;
+  word-wrap: break-word;
+}
+.bins-connections_title {
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.3;
+  color: #404040;
+  background: #eaf0f2;
+  margin: 5px 0;
+  padding: 5px 5px;
+}
+.bins-connections_list{
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  margin: 5px 0;
+  padding:0 0 0 5px;
+}
+.bins-connection{
+  margin: 0 5px 0 0;
 }
