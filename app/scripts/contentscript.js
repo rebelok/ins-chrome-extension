@@ -16,7 +16,6 @@ function loadCSS(name){
 loadCSS('styles/main.css');
 loadScript('bower_components/jquery/dist/jquery.min.js');
 loadScript('bower_components/dustjs-linkedin/dist/dust-full.min.js');
-setTimeout(function(){loadScript('bower_components/dustjs-linkedin-helpers/dist/dust-helpers.min.js');},500);
 loadScript('scripts/gmail.js');
 loadScript('scripts/main.js');
 

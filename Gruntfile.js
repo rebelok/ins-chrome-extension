@@ -91,8 +91,7 @@ module.exports = function (grunt) {
 
     // Empties folders to start fresh
     clean: {
-      chrome: {
-      },
+      chrome: {},
       dist: {
         files: [{
           dot: true,
@@ -109,7 +108,7 @@ module.exports = function (grunt) {
       options: {
         jshintrc: '.jshintrc',
         reporter: require('jshint-stylish'),
-        ignores: ['<%= config.app %>/scripts/gmail.js','<%= config.app %>/scripts/main.js']
+        ignores: ['<%= config.app %>/scripts/gmail.js', '<%= config.app %>/scripts/main.js']
       },
       all: [
         'Gruntfile.js',
@@ -205,24 +204,23 @@ module.exports = function (grunt) {
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/styles/main.css': [
-    //         '<%= config.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/scripts/scripts.js': [
-    //         '<%= config.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
+    cssmin: {
+      dist: {
+        files: {
+          '<%= config.dist %>/styles/main.css': [
+            '<%= config.app %>/styles/{,*/}*.css'
+          ]
+        }
+      }
+    },
+    uglify: {
+       dist: {
+         files: {
+           '<%= config.dist %>/scripts/main.js':
+             '<%= config.dist %>/scripts/main.js'
+         }
+       },'<%= config.dist %>/scripts/gmail.js':'<%= config.dist %>/scripts/gmail.js'
+    },
     // concat: {
     //   dist: {}
     // },
@@ -242,6 +240,10 @@ module.exports = function (grunt) {
             'styles/{,*/}*.css',
             'styles/fonts/{,*/}*.*',
             '_locales/{,*/}*.json',
+            'scripts/gmail.js',
+            'scripts/main.js',
+            'bower_components/jquery/dist/jquery.min.js',
+            'bower_components/dustjs-linkedin/dist/dust-full.min.js',
           ]
         }]
       }
@@ -249,14 +251,12 @@ module.exports = function (grunt) {
 
     // Run some tasks in parallel to speed up build process
     concurrent: {
-      chrome: [
-      ],
+      chrome: [],
       dist: [
         'imagemin',
         'svgmin'
       ],
-      test: [
-      ]
+      test: []
     },
 
     // Auto buildnumber, exclude debug files. smart builds that event pages
@@ -280,7 +280,7 @@ module.exports = function (grunt) {
     compress: {
       dist: {
         options: {
-          archive: function() {
+          archive: function () {
             var manifest = grunt.file.readJSON('app/manifest.json');
             return 'package/insightful-extension-' + manifest.version + '.zip';
           }
@@ -315,7 +315,7 @@ module.exports = function (grunt) {
     'useminPrepare',
     'concurrent:dist',
     // No UI feature selected, cssmin task will be commented
-    // 'cssmin',
+    'cssmin',
     'concat',
     'uglify',
     'copy',

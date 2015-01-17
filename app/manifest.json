@@ -1,11 +1,11 @@
 {
-    "name": "__MSG_appName__",
-    "version": "0.0.4",
+    "name": "Insightful",
+    "description": "Find the right people at the right time!",
+    "version": "0.0.14",
     "manifest_version": 2,
-    "description": "__MSG_appDescription__",
     "icons": {
-        "16": "images/icon-16.png",
-        "128": "images/icon-128.png"
+        "16": "images/ins16.png",
+        "128": "images/ins128.png"
     },
     "default_locale": "en",
     "background": {
@@ -21,19 +21,17 @@
                 "https://mail.google.com/*"
             ],
             "js": [
-               "scripts/contentscript.js"
+                "scripts/contentscript.js"
             ],
             "run_at": "document_end"
         }
     ],
-  "web_accessible_resources": [
-    "bower_components/jquery/dist/jquery.min.js",
-    "bower_components/jquery/dist/jquery.min.map",
-    "bower_components/dustjs/dist/dust-full-0.3.0.min.js",
-    "bower_components/dustjs-linkedin/dist/dust-full.min.js",
-    "bower_components/dustjs-linkedin-helpers/dist/dust-helpers.min.js",
-    "scripts/gmail.js",
-    "scripts/main.js",
-    "styles/main.css"
-  ]
+    "web_accessible_resources": [
+        "bower_components/jquery/dist/jquery.min.js",
+        "bower_components/jquery/dist/jquery.min.map",
+        "bower_components/dustjs-linkedin/dist/dust-full.min.js",
+        "scripts/gmail.js",
+        "scripts/main.js",
+        "styles/main.css"
+    ]
 }
