@@ -21,7 +21,6 @@ function main() {
     console.log('Hello, ', gmail.get.user_email());
     init();
     initObservations();
-    bindEmailHover();
     checkRapportive();
     initSearchDetection();
   } catch (e) {
@@ -30,9 +29,14 @@ function main() {
 }
 refresh(main);
 
-function initObservations() {
-  gmail.observe.on('view_thread', function () {});
+function observEmailView() {
+  gmail.observe.on('view_thread', function () {
+  });
   gmail.observe.on('view_email', viewEmail);
+}
+function initObservations() {
+  observEmailView();
+  observEmailHover();
 }
 function initSearchDetection() {
   //var searchBar =gmail.dom.search_bar();
@@ -41,13 +45,13 @@ function initSearchDetection() {
   window.onhashchange = onHashChange;
 }
 
-function onHashChange(){
+function onHashChange() {
   console.log('hash changed');
-  if(window.location.hash.indexOf('%40')>-1){
+  if (window.location.hash.indexOf('%40') > -1) {
     showSearchBar();
   }
 }
-function showSearchBar(){
+function showSearchBar() {
   var searchQuery = gmail.get.search_query();
   console.log('Search: ', searchQuery);
   console.log('searching: ', gmail.tools.extract_email_address(searchQuery));
@@ -56,11 +60,10 @@ function showSearchBar(){
 
 function init() {
   var page = gmail.get.current_page();
-  console.log('page',page);
+  console.log('page', page);
   if (page == null) {
     var currentEmailId = gmail.get.email_id();
-    if(currentEmailId)
-    {
+    if (currentEmailId) {
       drawSidebar(getEmail(currentEmailId));
     }
   }
@@ -92,13 +95,14 @@ function getEmail(emailId) {
 function getSidebar(email) {
   var sideBar = $('.insightfulSidebar');
   if (sideBar.length == 0) {
-    sideBar =$('<div class="insightfulSidebar"></div>').prependTo('.adC[role="complementary"]');
+    sideBar = $('<div class="insightfulSidebar"></div>').prependTo('.adC[role="complementary"]');
   }
-  if(sideBar.attr('email') != email){
-    sideBar.empty().attr('email',email);
+  if (sideBar.attr('email') != email) {
+    sideBar.empty().attr('email', email);
   }
 }
 function drawSidebar(email) {
+  if (!email)return;
   console.log('drawSidebar. Email: ', email);
 
   getSidebar(email);
@@ -137,7 +141,7 @@ function drawSidebar(email) {
         "SLinksSum": 0.94794520547945216,
         "Id": 282587,
         "Link": "link"
-      },{
+      }, {
         "FirstName": "Ilya",
         "LastName": "Billig",
         "Color": "blues",
@@ -160,7 +164,7 @@ function drawSidebar(email) {
         "SLinksSum": 0.94794520547945216,
         "Id": 282587,
         "Link": "link"
-      },{
+      }, {
         "FirstName": "Ilya",
         "LastName": "Billig",
         "Color": "grays",
@@ -173,14 +177,34 @@ function drawSidebar(email) {
         "Link": "link"
       }]
   };
+  if(true){
+    renderSideBar(data);
+  }else{
+  var url = 'https://cloud.insightfulinc.com/api/Extension';
+  $.ajax({
+    url: url,
+    dataType: 'json',
+    data: {email: email}
 
 
+  }).done(renderSideBar).fail(function onError(jhr, status, error) {
+    console.log('error - jhr %s, status - %s, error - %s', jhr, status, error);
+  }).always(function (data) {
+    console.log('done');
+    console.log(data)
+  });
+  }
+
+}
+function renderSideBar(data) {
+  console.log('renderSidebar');
   var compiledFullTemplate = dust.compile(template, "FullTemplate");
   dust.loadSource(compiledFullTemplate);
   var compiledSimpleTemplate = dust.compile(simpleTemplate, "SimpleTemplate");
   dust.loadSource(compiledSimpleTemplate);
 
   dust.render(IsRapportiveInstalled ? "SimpleTemplate" : "FullTemplate", data, render);
+
 }
 
 function render(err, out) {

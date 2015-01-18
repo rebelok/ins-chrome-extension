@@ -214,12 +214,12 @@ module.exports = function (grunt) {
       }
     },
     uglify: {
-       dist: {
-         files: {
-           '<%= config.dist %>/scripts/main.js':
-             '<%= config.dist %>/scripts/main.js'
-         }
-       },'<%= config.dist %>/scripts/gmail.js':'<%= config.dist %>/scripts/gmail.js'
+      dist: {
+        files: {
+          '<%= config.dist %>/scripts/main.js': '<%= config.dist %>/scripts/main.js'
+        }
+      },
+      '<%= config.dist %>/scripts/gmail.js': '<%= config.dist %>/scripts/gmail.js'
     },
     // concat: {
     //   dist: {}
