@@ -1,12 +1,11 @@
 .bins-avatar_img {
-  -webkit-border-radius: 100%;
-  -moz-border-radius: 100%;
   border-radius: 100%;
 }
 .bins-connection .bins-avatar_img{
-  max-width: 35px;
-  max-height: 35px;
+  width: 35px;
+  height: 35px;
 }
+
 
 .greens {
   border: 3px solid #80bd01;
@@ -14,7 +13,7 @@
 .blues{
   border:3px solid #56a3dd
 }
-.grays{
+.grays,.greys{
   border:3px solid #e2ebed;
 }
 
@@ -70,3 +69,51 @@
 .bins-connection{
   margin: 0 5px 0 0;
 }
+
+.bins-search_bar {
+  position: relative;
+  height: 55px;
+  padding: 7px 0 7px 7px;
+  color: #222;
+  background-color: rgba(255,255,255,.9);
+  font-size: 13px;
+  margin: 7px 0;
+  display: flex;
+}
+
+.bins-person__avatar .bins-avatar_img{
+  width: 50px;
+  height: 50px;
+}
+
+.bins-search_bar .bins-person{
+  margin: 0 7px;
+}
+.bins-search_bar .bins-h2-name{
+  padding:0 5px 3px;
+  margin-bottom: 3px;
+}
+.bins-search_bar .bins-h2-position {
+  font-size: 13px;
+  margin: 0;
+  padding: 0 5px;
+}
+.bins-search_bar .bins-email{
+  padding-top:2px;
+}
+.bins-search_bar .bins-phone{
+  padding: 0 5px;
+  line-height: 38px;
+}
+.bins-search_bar .bins-connections{
+  padding: 0 14px;
+}
+.bins-search_bar .bins-connections_title {
+  line-height: 12px;
+  margin: -3px 0 0;
+  padding: 3px 3px;
+}
+.bins-search_bar .bins-connections_list{
+  margin: 2px;
+}
+
