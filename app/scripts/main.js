@@ -46,8 +46,8 @@ function initDefaultState() {
         drawSidebar(email);
       }
     }
-  }else{
-    if(page.indexOf('search')==0){
+  } else {
+    if (page.indexOf('search') == 0) {
       drawSearchBar();
     }
   }
@@ -124,7 +124,8 @@ function drawSearchBar() {
   var email = gmail.tools.extract_email_address(searchQuery);
   if (!email)return;
   console.log('searching: ', email);
-  requestData(email, renderSearchBar);
+  var localErrorCallback = errorCallback.bind(null, appendSearchBar);
+  requestData(email, renderSearchBar, localErrorCallback);
 }
 
 function initSideBar() {
@@ -134,131 +135,64 @@ function initSideBar() {
   }
 }
 
-function requestData(email, callback) {
-  var data = {
-    "Person": {
-      "FirstName": "Anton",
-      "LastName": "Gelenava",
-      "Link": "url",
-      "Color": "greens",
-      "AvatarUrl": "http://t0.gstatic.com/images?q=tbn:ANd9GcSLihjiJR0vIXqcDQ_wgD13JheFIZBFK8nAcEh4eroZrVWW3aYbnGvM1ck",
-      "Email": "anton.gelenava@firstlinesoftware.com",
-      "Position": "CEO",
-      "CompanyName": "First Line Software, Inc",
-      "CompanyLink": "http://cloud.insightfulinc.com/Company/Details/2",
-      "SLinksSum": 90,
-      "Connections": [{
-        "FirstName": "Ilya",
-        "LastName": "Billig",
-        "Color": "blues",
-        "AvatarUrl": "http://cloud.insightfulinc.com/static/img/custom/person-nemo.png",
-        "Position": "CEO",
-        "CompanyName": "Insightful Inc.",
-        "CompanyLink": "http://cloud.insightfulinc.com/Company/Details/2",
-        "SLinksSum": 50.383561643835616,
-        "Id": 2,
-        "Link": "link"
-      },
-        {
-          "FirstName": "Sergey",
-          "LastName": "Popov",
-          "Color": "greens",
-          "AvatarUrl": "http://m.c.lnkd.licdn.com/mpr/mprx/0_Rm-zuCdMfZ7_QRzkUd1Euh4BSUUfXjkkM26EuhHQtY70RMPXBeGJG8ye_zRrbV5eVSrI_bsyfcFd",
-          "Position": null,
-          "CompanyName": "First Line Software, Inc",
-          "CompanyLink": "http://cloud.insightfulinc.com/Company/Details/2",
-          "SLinksSum": 0.94794520547945216,
-          "Id": 282587,
-          "Link": "link"
-        }, {
-          "FirstName": "Ilya",
-          "LastName": "Billig",
-          "Color": "blues",
-          "AvatarUrl": "http://cloud.insightfulinc.com/static/img/custom/person-nemo.png",
-          "Position": "CEO",
-          "CompanyName": "Insightful Inc.",
-          "CompanyLink": "http://cloud.insightfulinc.com/Company/Details/2",
-          "SLinksSum": 50.383561643835616,
-          "Id": 2,
-          "Link": "link"
-        },
-        {
-          "FirstName": "Sergey",
-          "LastName": "Popov",
-          "Color": "grays",
-          "AvatarUrl": "http://m.c.lnkd.licdn.com/mpr/mprx/0_Rm-zuCdMfZ7_QRzkUd1Euh4BSUUfXjkkM26EuhHQtY70RMPXBeGJG8ye_zRrbV5eVSrI_bsyfcFd",
-          "Position": null,
-          "CompanyName": "First Line Software, Inc",
-          "CompanyLink": "http://cloud.insightfulinc.com/Company/Details/2",
-          "SLinksSum": 0.94794520547945216,
-          "Id": 282587,
-          "Link": "link"
-        }, {
-          "FirstName": "Ilya",
-          "LastName": "Billig",
-          "Color": "grays",
-          "AvatarUrl": "http://cloud.insightfulinc.com/static/img/custom/person-nemo.png",
-          "Position": "CEO",
-          "CompanyName": "Insightful Inc.",
-          "CompanyLink": "http://cloud.insightfulinc.com/Company/Details/2",
-          "SLinksSum": 50.383561643835616,
-          "Id": 2,
-          "Link": "link"
-        }]
-    }
-  };
-
-  if (false) {
-    callback(data);
-  } else {
-    var url = 'https://cloud.insightfulinc.com:8443/api/Extension';
-    $.ajax({
-      url: url,
-      dataType: 'json',
-      data: {email: email},
-      xhrFields: {withCredentials: true}
-    })
-      .done(callback)
-      .fail(function onError(jhr, status, error) {
-        console.log('error - jhr %s, status - %s, error - %s', jhr, status, error);
-      })
-      .always(function (data) {
-        console.log('done');
-        console.log(data)
-      });
-  }
+function requestData(email, callback, errorCallback) {
+  var url = 'https://cloud.insightfulinc.com:8443/api/Extension';
+  $.ajax({
+    url: url,
+    dataType: 'json',
+    data: {email: email},
+    xhrFields: {withCredentials: true}
+  })
+    .done(callback)
+    .fail(errorCallback)
+    .always(function (data) {
+      console.log('done');
+      console.log(data)
+    });
 }
+
 function drawSidebar(email) {
   if (!email)return;
   console.log('drawSidebar. Email: ', email);
-  requestData(email, renderSideBar);
+  var localErrorCallback = errorCallback.bind(null, appendSidebar);
+  requestData(email, renderSideBar, localErrorCallback);
 }
 
 function renderSideBar(data) {
   console.log('renderSidebar');
-  initSideBar();
   dust.render(IsRapportiveInstalled ? "simpleSideBarTemplate" : "fullSideBarTemplate", data, appendSidebar);
+}
+function errorCallback(unauthtorizedCallback, jhr, status, error) {
+  console.log(unauthtorizedCallback);
+  console.log(jhr);
+  if (jhr.status == '401') {
+    unauthtorizedCallback('401', '<div class="bins-footer"> Please, login to load additional information about contact <nobr>from <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Isightful</a>.</nobr></div> ');
+    console.log()
+  }
+  console.log('error - jhr %s, status - %s, error - %s', jhr, status, error);
 }
 function renderSearchBar(data) {
   console.log('renderSearchBar');
-  initSearchBar();
   dust.render('searchBarTemplate', data, appendSearchBar);
 
 }
 function initSearchBar() {
   var sideBar = $('[role="main"] .bins-search_bar');
   if (sideBar.length == 0) {
-    $('.bX').after('<div class="bins-search_bar"></div>');
+    $('[role="main"] .bX').after('<div class="bins-search_bar"></div>');
   }
 }
 
 function appendSidebar(err, out) {
+  initSideBar();
   $('.insightfulSidebar').html(out).trigger("create");
   console.log('Rendered sidebar. error = ', err);
 }
 function appendSearchBar(err, out) {
-  $('.bins-search_bar').html(out).trigger("create");
   console.log('Rendered searchbar. error = ', err);
+  initSearchBar();
+  var searchBar = $('.bins-search_bar');
+  searchBar.html(out).trigger("create");
 }
 
 function compileTemplates() {
@@ -278,12 +212,18 @@ var fullSideBarTemplate = '{#Person}\
   </div>\
   <div class="bins-avatar"><img class="bins-avatar_img {Color}  {@select key=Sigma}{@gte value=80}bins-link_green{/gte}{@gte value=50}bins-link_blue{/gte}{@default}bins-link_gray{/default}{/select}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/></div>\
    <div class="bins-position">\
+ {?.Position}\
   <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
-  <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
-  <div class="bins-email">\
-  <a class="bins-email_link" href="mailto://{Emails[0]}">{Emails[0]}</a>\
+  {/.Position}\
+   {?.CompanyName}\
+<a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
+  {/.CompanyName}\
+    {?.Emails}\
+<div class="bins-email">\
+  <a class="bins-link bins-email_link" href="mailto://{Emails[0]}">{Emails[0]}</a>\
   </div>\
-  {?.Connections}\
+     {/.Emails}\
+{?.Connections}\
   <div class="bins-connections_title">\
   Connections\
   </div>\
@@ -294,44 +234,52 @@ var fullSideBarTemplate = '{#Person}\
     </a></li>{~n}\
 {/Connections}\
 </ul>\
+<div class="bins-footer"><a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a></div>\
   </div>\
 {/.Connections}\
     {/Person}';
 
 var searchBarTemplate = '{#Person} \
+<a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
+<div class="bins-search_bar__content">\
     <div class="bins-person__avatar">\
       <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
     </div>\
   <div class="bins-person">\
-  <h2 class="bins-h2 bins-h2-name">\
-    <a class="bins-person_link" href="{link}">{FirstName} {LastName}</a>\
-  </h2>\
-   <div class="bins-position">\
-  <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
-  <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
-  </div></div>\
-  <div class="bins-contacts">\
-  <div class="bins-email">\
-  <a class="bins-email_link" href="mailto://{Emails[0]}">{Emails[0]}</a>\
+    <h2 class="bins-h2 bins-h2-name">\
+      <a class="bins-person_link" href="{link}">{FirstName} {LastName}</a>\
+    </h2>\
+    <div class="bins-position">\
+      <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
+      <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
+    </div>\
   </div>\
-  <span class="bins-phone">\
-  {Phones[0]}\
-  </div></div>\
+  <div class="bins-contacts">\
+    <div class="bins-email">\
+      <a class="bins-link bins-email_link" href="mailto://{Emails[0]}">{Emails[0]}</a>\
+    </div>\
+    <span class="bins-phone">\
+    {Phones[0]}\
+    </span>\
+  </div>\
   {?.Connections}\
   <div class="bins-connections">\
-  <div class="bins-connections_title">\
-  Connections\
-  </div>\
+    <div class="bins-connections_title">\
+    Connections\
+    </div>\
     <ul class="bins-connections_list">\
-{#Connections}\
-    <li class="bins-connection"><a href="{Link}" title="{FirstName} {LastName}">\
-    <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
-    </a></li>{~n}\
-{/Connections}\
-</ul>\
+    {#Connections}\
+      <li class="bins-connection">\
+        <a href="{Link}" title="{FirstName} {LastName}">\
+          <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+        </a>\
+      </li>{~n}\
+    {/Connections}\
+    </ul>\
   </div>\
 {/.Connections}\
-    {/Person}';
+</div>\
+ {/Person}';
 
 var simpleSideBarTemplate = '{#Person} \
   {?.Connections}\
@@ -349,4 +297,5 @@ Connections\
 </ul>\
   </div>\
 {/.Connections}\
-    {/Person}';
+    <div class="bins-footer"><a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a></div>\
+{/Person}';
