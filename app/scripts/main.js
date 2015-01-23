@@ -40,6 +40,7 @@ function initDefaultState() {
   console.log('page', page);
   if (page == null) {
     var currentEmailId = gmail.get.email_id();
+    console.log(currentEmailId);
     if (currentEmailId) {
       var email = getEmail(currentEmailId);
       if (email) {
@@ -206,38 +207,44 @@ function compileTemplates() {
 
 var fullSideBarTemplate = '{#Person}\
   <div class=".bins-name">\
-  <h2 class="bins-h2 bins-h2-name">\
-    <a class="bins-person_link" href="{link}">{FirstName} {LastName}</a>\
-  </h2>\
+    <h2 class="bins-h2 bins-h2-name">\
+      <a class="bins-person_link" href="{link}">{FirstName} {LastName}</a>\
+    </h2>\
   </div>\
-  <div class="bins-avatar"><img class="bins-avatar_img {Color}  {@select key=Sigma}{@gte value=80}bins-link_green{/gte}{@gte value=50}bins-link_blue{/gte}{@default}bins-link_gray{/default}{/select}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/></div>\
-   <div class="bins-position">\
- {?.Position}\
-  <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
-  {/.Position}\
-   {?.CompanyName}\
-<a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
-  {/.CompanyName}\
-    {?.Emails}\
-<div class="bins-email">\
-  <a class="bins-link bins-email_link" href="mailto://{Emails[0]}">{Emails[0]}</a>\
-  </div>\
-     {/.Emails}\
-{?.Connections}\
-  <div class="bins-connections_title">\
-  Connections\
-  </div>\
-    <ul class="bins-connections_list">\
-{#Connections}\
-    <li class="bins-connection"><a href="{Link}" title="{FirstName} {LastName}">\
+  <div class="bins-avatar">\
     <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
-    </a></li>{~n}\
-{/Connections}\
-</ul>\
-<div class="bins-footer"><a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a></div>\
   </div>\
-{/.Connections}\
-    {/Person}';
+  <div class="bins-position">\
+    {?.Position}\
+      <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
+    {/.Position}\
+    {?.CompanyName}\
+      <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
+    {/.CompanyName}\
+  </div>\
+  {?.Emails}\
+    <div class="bins-email">\
+      <a class="bins-link bins-email_link" href="mailto://{Emails[0]}">{Emails[0]}</a>\
+    </div>\
+  {/.Emails}\
+  {?.Connections}\
+    <div class="bins-connections_title">\
+      Connections\
+    </div>\
+    <ul class="bins-connections_list">\
+      {#Connections}\
+        <li class="bins-connection">\
+          <a class="bins-connection_link" data-initials="{FirstName[0]}{LastName[0]}" href="{Link}" title="{FirstName} {LastName}">\
+            <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+          </a>\
+        </li>{~n}\
+      {/Connections}\
+    </ul>\
+    <div class="bins-footer">\
+      <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
+    </div>\
+  {/.Connections}\
+{/Person}';
 
 var searchBarTemplate = '{#Person} \
 <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\

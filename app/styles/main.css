@@ -80,6 +80,24 @@
 .bins-connection{
   margin: 0 5px 0 0;
 }
+.bins-connection_link{
+  position:relative;
+  height:38px;
+  width:38px;
+}
+.bins-connection_link:before{
+  content: attr(data-initials);
+  position: absolute;
+  text-align: center;
+  vertical-align: middle;
+  top:0;
+  bottom: 0;
+  left:0;
+  right: 0;
+  height: 38px;
+  margin: auto;
+  color: gray;
+}
 
 .bins-footer{
 text-align: right;
