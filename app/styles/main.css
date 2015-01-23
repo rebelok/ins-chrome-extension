@@ -52,8 +52,12 @@
   padding: 0 0 0 5px;
 }
 .bins-email_link{
-  word-wrap: break-word;
   font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  max-width: 100%;
 }
 .bins-link{
   color: gray;
