@@ -74,9 +74,7 @@ function observeEmailView() {
 
 function onHashChange() {
   console.log('hash changed');
-  if (window.location.hash.indexOf('%40') > -1) {
-    drawSearchBar();
-  }
+  drawSearchBar();
 }
 
 function observeEmailHover() {
@@ -122,11 +120,11 @@ function drawSearchBar() {
   var searchQuery = gmail.get.search_query();
   if (!searchQuery)return;
   console.log('Search: ', searchQuery);
-  var email = gmail.tools.extract_email_address(searchQuery);
-  if (!email)return;
-  console.log('searching: ', email);
+  var searchTerm = gmail.tools.extract_email_address(searchQuery) || searchQuery;
+  if (!searchTerm)return;
+  console.log('searching: ', searchTerm);
   var localErrorCallback = errorCallback.bind(null, appendSearchBar);
-  requestData(email, renderSearchBar, localErrorCallback);
+  requestData(searchTerm, renderSearchBar, localErrorCallback);
 }
 
 function initSideBar() {
@@ -224,7 +222,7 @@ var fullSideBarTemplate = '{#Person}\
   </div>\
   {?.Emails}\
     <div class="bins-email">\
-      <a class="bins-link bins-email_link" href="mailto://{Emails[0]}">{Emails[0]}</a>\
+      <a class="bins-link bins-email_link" title="{Emails[0]}" href="mailto://{Emails[0]}">{Emails[0]}</a>\
     </div>\
   {/.Emails}\
   {?.Connections}\
