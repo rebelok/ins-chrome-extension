@@ -1,7 +1,7 @@
 {
     "name": "Insightful",
     "description": "Find the right people at the right time!",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "manifest_version": 2,
     "icons": {
         "16": "images/ins16.png",

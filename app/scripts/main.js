@@ -176,10 +176,17 @@ function renderSearchBar(data) {
 
 }
 function initSearchBar() {
-  var sideBar = $('[role="main"] .bins-search_bar');
-  if (sideBar.length == 0) {
-    $('[role="main"] .bX').after('<div class="bins-search_bar"></div>');
-  }
+    $('[role="main"] .bins-search_bar').remove();
+    var target = $('div[role="main"]');
+    var googleSearchBar = target.find('.bX');
+    if(googleSearchBar.length>0){
+      target = googleSearchBar;
+    }
+    else{
+      target = target.children().first();
+    }
+    console.log(target);
+    target.after('<div class="bins-search_bar"></div>');
 }
 
 function appendSidebar(err, out) {
@@ -232,7 +239,7 @@ var fullSideBarTemplate = '{#Person}\
     <ul class="bins-connections_list">\
       {#Connections}\
         <li class="bins-connection">\
-          <a class="bins-connection_link" data-initials="{FirstName[0]}{LastName[0]}" href="{Link}" title="{FirstName} {LastName}">\
+          <a class="bins-connection_link" {?.EmptyAvatar}data-initials="{FirstName[0]}{LastName[0]}"{/.EmptyAvatar} href="{Link}" title="{FirstName} {LastName}">\
             <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
           </a>\
         </li>{~n}\
@@ -274,11 +281,11 @@ var searchBarTemplate = '{#Person} \
     </div>\
     <ul class="bins-connections_list">\
     {#Connections}\
-      <li class="bins-connection">\
-        <a href="{Link}" title="{FirstName} {LastName}">\
-          <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
-        </a>\
-      </li>{~n}\
+     <li class="bins-connection">\
+          <a class="bins-connection_link" {?.EmptyAvatar}data-initials="{FirstName[0]}{LastName[0]}"{/.EmptyAvatar} href="{Link}" title="{FirstName} {LastName}">\
+            <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+          </a>\
+        </li>{~n}\
     {/Connections}\
     </ul>\
   </div>\
@@ -293,11 +300,11 @@ Connections\
 </div>\
     <ul class="bins-connections_list">\
 {#Connections}\
-    <li class="bins-connection">\
-    <a href="{Link}" title="{FirstName} {LastName}">\
-    <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
-    </a>\
-    </li>{~n}\
+   <li class="bins-connection">\
+          <a class="bins-connection_link" {?.EmptyAvatar}data-initials="{FirstName[0]}{LastName[0]}"{/.EmptyAvatar} href="{Link}" title="{FirstName} {LastName}">\
+            <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+          </a>\
+        </li>{~n}\
 {/Connections}\
 </ul>\
   </div>\
