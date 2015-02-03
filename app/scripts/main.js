@@ -12,6 +12,8 @@ function refresh(f) {
 }
 
 var gmail, $, IsRapportiveInstalled;
+var sideBarTemplate = '<div class="bins-side_bar"></div>',
+  disabledButtonClass = 'bins-button__disabled';
 
 
 function main() {
@@ -33,8 +35,11 @@ function init() {
   initObservations();
   initSearchDetection();
   initDefaultState();
+  initEvents();
 }
-
+function initEvents(){
+  $('.bins-button_invite').click(sendInvite);
+}
 function initDefaultState() {
   var page = gmail.get.current_page();
   console.log('page', page);
@@ -78,7 +83,7 @@ function onHashChange() {
 }
 
 function observeEmailHover() {
-  $('body').on('mouseenter', '[email].g2', onEmailHover);
+  $('body').on('mouseenter', '[email]', onEmailHover);
 }
 
 function detectRapportive() {
@@ -128,10 +133,37 @@ function drawSearchBar() {
 }
 
 function initSideBar() {
-  var sideBar = $('.insightfulSidebar');
-  if (sideBar.length == 0) {
-    $('.adC[role="complementary"]').children().first().prepend('<div class="insightfulSidebar"></div>');
+  $('.bins-side_bar').remove();
+    if(IsRapportiveInstalled){
+    $('#rapportive-sidebar').after(sideBarTemplate);
+    return;
   }
+  $('.adC[role="complementary"]').children().first().append(sideBarTemplate);
+}
+
+function sendInvite(){
+  var $this = $(this);
+  var invDiv =$('<div class="bins-invite">Invitation sent</div>');
+  var email = $this.data('email');
+  var url = 'https://cloud.insightfulinc.com:8443/api/userprofileapi?invite';
+
+  $this.addClass(disabledButtonClass);
+
+  $.ajax({
+    url: url,
+    type: 'POST',
+    dataType: 'json',
+    data: {email: email},
+    xhrFields: {withCredentials: true}
+  })
+    .done(function(){
+      $this.after(invDiv).remove();
+    })
+    .fail(function (data) {
+      console.log('invite failed');
+      console.log(data);
+      $this.removeClass(disabledButtonClass);
+    });
 }
 
 function requestData(email, callback, errorCallback) {
@@ -191,14 +223,16 @@ function initSearchBar() {
 
 function appendSidebar(err, out) {
   initSideBar();
-  $('.insightfulSidebar').html(out).trigger("create");
+  $('.bins-side_bar').html(out).trigger("create");
   console.log('Rendered sidebar. error = ', err);
+  initEvents();
 }
 function appendSearchBar(err, out) {
   console.log('Rendered searchbar. error = ', err);
   initSearchBar();
   var searchBar = $('.bins-search_bar');
   searchBar.html(out).trigger("create");
+  initEvents();
 }
 
 function compileTemplates() {
@@ -211,18 +245,27 @@ function compileTemplates() {
 }
 
 var fullSideBarTemplate = '{#Person}\
-  <div class=".bins-name">\
+  <div class="bins-name">\
     <h2 class="bins-h2 bins-h2-name">\
       <a class="bins-person_link" href="{link}">{FirstName} {LastName}</a>\
     </h2>\
   </div>\
+  <div class="bins-person">\
   <div class="bins-avatar">\
     <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
-  </div>\
-  <div class="bins-position">\
+    </div>\
+    {?.InvitationsStatus}\
+      <div class="bins-invite">Invitation sent</div>\
+    {:else}\
+      {?.CanInvite}\
+        <div class="bins-button bins-button_invite" data-email="{Emails[0]}">Invite</div>\
+      {/.CanInvite}\
+    {/.InvitationsStatus}\
     {?.Position}\
       <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
     {/.Position}\
+  </div>\
+  <div class="bins-position">\
     {?.CompanyName}\
       <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
     {/.CompanyName}\
@@ -309,5 +352,14 @@ Connections\
 </ul>\
   </div>\
 {/.Connections}\
-    <div class="bins-footer"><a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a></div>\
+    <div class="bins-footer">\
+      {?.InvitationsStatus}\
+        <div class="bins-invite">Invitation sent</div>\
+      {:else}\
+        {?.CanInvite}\
+          <div class="bins-button bins-button_invite" data-email="{Emails[0]}">Invite</div>\
+        {/.CanInvite}\
+      {/.InvitationsStatus}\
+      <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
+    </div>\
 {/Person}';

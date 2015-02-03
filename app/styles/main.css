@@ -1,19 +1,26 @@
-.insightfulSidebar, .bins-search_bar{
+.bins-side_bar, .bins-search_bar{
   font:16px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #222;
 }
 .bins-footer{
   font-size: 12px;
- padding: 3px 0;
+  padding: 3px 0;
   margin: 3px 0;
   border-bottom: 1px solid #e0e6e8;
+}
+.bins-avatar{
+  float:left;
 }
 .bins-avatar_img {
   border-radius: 100%;
 }
+.bins-person .bins-avatar_img{
+  max-width: 50px;
+  max-height: 50px;
+}
 .bins-connection .bins-avatar_img{
-  width: 35px;
-  height: 35px;
+  max-width: 35px;
+  max-height: 35px;
 }
 
 
@@ -39,13 +46,31 @@
 }
 .bins-h2-position{
   font-size: 13px ;
+  padding: 7px 0 0 0;
 }
+.bins-side_bar .bins-position,
+.bins-side_bar .bins-invite,
+.bins-side_bar .bins-h2-position{
+  margin:0 0 7px 63px;
+}
+
+.bins-invite{
+  font-size: 12px;
+  font-style: italic;
+}
+
+.bins-footer .bins-invite{
+  display: inline-block;
+  margin:0;
+}
+
 .bins-person_link{
   color: #34658e;
   text-decoration: none;
 }
 .bins-company_link{
-  padding: 0 0 0 5px;
+  font-size: 14px;
+  /*padding: 0 0 0 5px;*/
 
 }
 .bins-email {
@@ -179,5 +204,22 @@ padding-right: 5px;
 .bins-search_bar .bins-site_link{
   float:right;
   margin: 5px;
+}
+
+.bins-button {
+  box-shadow: 0 1px 0 rgba(0,0,0,.05);
+  background-color: #fff;
+  color: #404040;
+  border: 1px solid #d4d4d4;
+  padding-right: 5px;
+  padding-left: 5px;
+  text-align: left;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 12px;
+  cursor:pointer;
+}
+.bins-button_invite{
+  margin: 0 0 0 7px;
 }
 
