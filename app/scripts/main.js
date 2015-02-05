@@ -138,7 +138,7 @@ function initSideBar() {
     $('#rapportive-sidebar').after(sideBarTemplate);
     return;
   }
-  $('.adC[role="complementary"]').children().first().append(sideBarTemplate);
+  $('.adC[role="complementary"]').children().first().prepend(sideBarTemplate);
 }
 
 function sendInvite(){
@@ -152,16 +152,18 @@ function sendInvite(){
   $.ajax({
     url: url,
     type: 'POST',
-    dataType: 'json',
     data: {email: email},
     xhrFields: {withCredentials: true}
   })
     .done(function(){
+      console.log('invite ok');
       $this.after(invDiv).remove();
     })
-    .fail(function (data) {
+    .fail(function (data,a,b,c) {
       console.log('invite failed');
       console.log(data);
+      console.log(a);
+      console.log(b);
       $this.removeClass(disabledButtonClass);
     });
 }
@@ -247,20 +249,15 @@ function compileTemplates() {
 var fullSideBarTemplate = '{#Person}\
   <div class="bins-name">\
     <h2 class="bins-h2 bins-h2-name">\
-      <a class="bins-person_link" href="{link}">{FirstName} {LastName}</a>\
+      <a class="bins-person_link" href="{Link}">{FirstName} {LastName}</a>\
     </h2>\
   </div>\
   <div class="bins-person">\
   <div class="bins-avatar">\
-    <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+    <a class="bins-person_link" href="{Link}">\
+      <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+    </a>\
     </div>\
-    {?.InvitationsStatus}\
-      <div class="bins-invite">Invitation sent</div>\
-    {:else}\
-      {?.CanInvite}\
-        <div class="bins-button bins-button_invite" data-email="{Emails[0]}">Invite</div>\
-      {/.CanInvite}\
-    {/.InvitationsStatus}\
     {?.Position}\
       <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
     {/.Position}\
@@ -270,9 +267,19 @@ var fullSideBarTemplate = '{#Person}\
       <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
     {/.CompanyName}\
   </div>\
-  {?.Emails}\
+  {?.InvitationsStatus}\
+      <div class="bins-invite">Invitation sent</div>\
+    {:else}\
+      {?.CanInvite}\
+        <div class="bins-button bins-button_invite" data-email="{Emails[0]}">Invite</div>\
+      {/.CanInvite}\
+    {/.InvitationsStatus}\
+    {?.Emails}\
     <div class="bins-email">\
-      <a class="bins-link bins-email_link" title="{Emails[0]}" href="mailto://{Emails[0]}">{Emails[0]}</a>\
+      {#Emails}\
+       <a class="bins-link bins-email_link" title="{.}" href="mailto://{.}">{.}</a>\
+        {~n}\
+      {/Emails}\
     </div>\
   {/.Emails}\
   {?.Connections}\
@@ -298,11 +305,13 @@ var searchBarTemplate = '{#Person} \
 <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
 <div class="bins-search_bar__content">\
     <div class="bins-person__avatar">\
-      <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+      <a class="bins-person_link" href="{Link}">\
+        <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+      </a>\
     </div>\
   <div class="bins-person">\
     <h2 class="bins-h2 bins-h2-name">\
-      <a class="bins-person_link" href="{link}">{FirstName} {LastName}</a>\
+      <a class="bins-person_link" href="{Link}">{FirstName} {LastName}</a>\
     </h2>\
     <div class="bins-position">\
       <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
@@ -310,12 +319,20 @@ var searchBarTemplate = '{#Person} \
     </div>\
   </div>\
   <div class="bins-contacts">\
+   {?.Emails}\
     <div class="bins-email">\
-      <a class="bins-link bins-email_link" href="mailto://{Emails[0]}">{Emails[0]}</a>\
+      {#Emails}\
+       <a class="bins-link bins-email_link" title="{.}" href="mailto://{.}">{.}</a>{~n}\
+      {/Emails}\
     </div>\
-    <span class="bins-phone">\
-    {Phones[0]}\
-    </span>\
+    {/.Emails}\
+    {?.Phones}\
+      <div class="bins-phones">\
+        {#Phones}\
+         <span class="bins-phone">{.}</span>{~n}\
+        {/Phones}\
+      </div>\
+    {/.Phones}\
   </div>\
   {?.Connections}\
   <div class="bins-connections">\
