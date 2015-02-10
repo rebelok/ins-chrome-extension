@@ -37,19 +37,23 @@ function init() {
   initDefaultState();
   initEvents();
 }
-function initEvents(){
+function initEvents() {
   $('.bins-button_invite').click(sendInvite);
 }
 function initDefaultState() {
   var page = gmail.get.current_page();
   console.log('page', page);
   if (page == null) {
-    var currentEmailId = gmail.get.email_id();
-    console.log(currentEmailId);
-    if (currentEmailId) {
-      var email = getEmail(currentEmailId);
-      if (email) {
-        drawSidebar(email);
+    if (gmail.check.is_google_apps_user() && !(gmail.get.displayed_email_data() && gmail.get.displayed_email_data().thread_id)) {
+      drawSearchBar()
+    } else {
+      var currentEmailId = gmail.get.email_id();
+      console.log(currentEmailId);
+      if (currentEmailId) {
+        var email = getEmail(currentEmailId);
+        if (email) {
+          drawSidebar(email);
+        }
       }
     }
   } else {
@@ -123,27 +127,31 @@ function getEmail(emailId) {
 
 function drawSearchBar() {
   var searchQuery = gmail.get.search_query();
-  if (!searchQuery)return;
+  if (!searchQuery) {
+    console.log('no search query detected');
+    return;
+  }
   console.log('Search: ', searchQuery);
   var searchTerm = gmail.tools.extract_email_address(searchQuery) || searchQuery;
   if (!searchTerm)return;
   console.log('searching: ', searchTerm);
-  var localErrorCallback = errorCallback.bind(null, appendSearchBar);
+  var localErrorCallback = errorCallback.bind(null, appendSearchBar, function () {
+  });
   requestData(searchTerm, renderSearchBar, localErrorCallback);
 }
 
 function initSideBar() {
   $('.bins-side_bar').remove();
-    if(IsRapportiveInstalled){
+  if (IsRapportiveInstalled) {
     $('#rapportive-sidebar').after(sideBarTemplate);
     return;
   }
   $('.adC[role="complementary"]').children().first().prepend(sideBarTemplate);
 }
 
-function sendInvite(){
+function sendInvite() {
   var $this = $(this);
-  var invDiv =$('<div class="bins-invite">Invitation sent</div>');
+  var invDiv = $('<div class="bins-invite">Invitation sent</div>');
   var email = $this.data('email');
   var url = 'https://cloud.insightfulinc.com:8443/api/userprofileapi?invite';
 
@@ -155,11 +163,11 @@ function sendInvite(){
     data: {email: email},
     xhrFields: {withCredentials: true}
   })
-    .done(function(){
+    .done(function () {
       console.log('invite ok');
       $this.after(invDiv).remove();
     })
-    .fail(function (data,a,b,c) {
+    .fail(function (data, a, b, c) {
       console.log('invite failed');
       console.log(data);
       console.log(a);
@@ -187,7 +195,7 @@ function requestData(email, callback, errorCallback) {
 function drawSidebar(email) {
   if (!email)return;
   console.log('drawSidebar. Email: ', email);
-  var localErrorCallback = errorCallback.bind(null, appendSidebar);
+  var localErrorCallback = errorCallback.bind(email, appendSidebar, appendSidebar);
   requestData(email, renderSideBar, localErrorCallback);
 }
 
@@ -195,12 +203,13 @@ function renderSideBar(data) {
   console.log('renderSidebar');
   dust.render(IsRapportiveInstalled ? "simpleSideBarTemplate" : "fullSideBarTemplate", data, appendSidebar);
 }
-function errorCallback(unauthtorizedCallback, jhr, status, error) {
+function errorCallback(unauthtorizedCallback, notFoundCallback, jhr, status, error) {
   console.log(unauthtorizedCallback);
   console.log(jhr);
-  if (jhr.status == '401') {
+  if (jhr.status === 401) {
     unauthtorizedCallback('401', '<div class="bins-footer"> Please, login to load additional information about contact <nobr>from <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Isightful</a>.</nobr></div> ');
-    console.log()
+  } else if (jhr.status === 404 && this) {
+    notFoundCallback('404', '<div class="bins-footer"><div class="bins-button bins-button_invite" data-email="' + this + '">Invite</div><a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a></div>');
   }
   console.log('error - jhr %s, status - %s, error - %s', jhr, status, error);
 }
@@ -210,17 +219,17 @@ function renderSearchBar(data) {
 
 }
 function initSearchBar() {
-    $('[role="main"] .bins-search_bar').remove();
-    var target = $('div[role="main"]');
-    var googleSearchBar = target.find('.bX');
-    if(googleSearchBar.length>0){
-      target = googleSearchBar;
-    }
-    else{
-      target = target.children().first();
-    }
-    console.log(target);
-    target.after('<div class="bins-search_bar"></div>');
+  $('[role="main"] .bins-search_bar').remove();
+  var target = $('div[role="main"]');
+  var googleSearchBar = target.find('.bX');
+  if (googleSearchBar.length > 0) {
+    target = googleSearchBar;
+  }
+  else {
+    target = target.children().first();
+  }
+  console.log(target);
+  target.after('<div class="bins-search_bar"></div>');
 }
 
 function appendSidebar(err, out) {
@@ -229,12 +238,32 @@ function appendSidebar(err, out) {
   console.log('Rendered sidebar. error = ', err);
   initEvents();
 }
+
 function appendSearchBar(err, out) {
   console.log('Rendered searchbar. error = ', err);
   initSearchBar();
   var searchBar = $('.bins-search_bar');
   searchBar.html(out).trigger("create");
   initEvents();
+  searchAfterRender();
+}
+
+function searchAfterRender() {
+
+  var $bar = $('.bins-search_bar');
+  if ($bar.length == 0)return;
+
+  var $gglBar = $('[role="main"] .bX');
+  if ($gglBar.length == 0)return;
+
+  if (gmail.check.is_google_apps_user()) {
+    $bar.parent().addClass('bins-guser');
+  }
+
+  var nameLink = $bar.find('.bins-h2-name');
+  if ($gglBar.find('.CR').text().toLowerCase().trim() === nameLink.text().toLowerCase().trim()) {
+    nameLink.remove();
+  }
 }
 
 function compileTemplates() {

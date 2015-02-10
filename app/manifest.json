@@ -1,7 +1,7 @@
 {
     "name": "Insightful",
     "description": "Find the right people at the right time!",
-    "version": "0.0.20",
+    "version": "0.0.30",
     "manifest_version": 2,
     "icons": {
         "16": "images/ins16.png",
@@ -33,6 +33,7 @@
         "scripts/gmail.js",
         "scripts/main.js",
         "styles/main.css",
+        "styles/main.css.map",
         "images/ins16.png"
     ]
 }

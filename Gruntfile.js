@@ -28,6 +28,10 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
+      scss: {
+        files: ['<%= config.app %>/styles/{,*/}*.css'],
+        tasks: ['sass']
+      },
       bower: {
         files: ['bower.json'],
         tasks: ['bowerInstall']
@@ -61,7 +65,17 @@ module.exports = function (grunt) {
         ]
       }
     },
-
+    sass: {
+      options: {                       // Target options
+        style: 'expanded',
+        sourcemap: 'none'
+      },
+      dist: {
+        files: {
+          '<%= config.app %>/styles/main.css': '<%= config.app %>/styles/main.scss'
+        }
+      }
+    },
     // Grunt server and debug server setting
     connect: {
       options: {
@@ -208,7 +222,7 @@ module.exports = function (grunt) {
       dist: {
         files: {
           '<%= config.dist %>/styles/main.css': [
-            '<%= config.app %>/styles/{,*/}*.css'
+            '<%= config.app %>/styles/{,*/*}*.css'
           ]
         }
       }
@@ -312,6 +326,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'chromeManifest:dist',
+    'sass',
     'useminPrepare',
     'concurrent:dist',
     // No UI feature selected, cssmin task will be commented
