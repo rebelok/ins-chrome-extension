@@ -37,9 +37,11 @@ function init() {
   initDefaultState();
   initEvents();
 }
+
 function initEvents() {
   $('.bins-button_invite').click(sendInvite);
 }
+
 function initDefaultState() {
   var page = gmail.get.current_page();
   console.log('page', page);
@@ -203,6 +205,7 @@ function renderSideBar(data) {
   console.log('renderSidebar');
   dust.render(IsRapportiveInstalled ? "simpleSideBarTemplate" : "fullSideBarTemplate", data, appendSidebar);
 }
+
 function errorCallback(unauthtorizedCallback, notFoundCallback, jhr, status, error) {
   console.log(unauthtorizedCallback);
   console.log(jhr);
@@ -213,11 +216,13 @@ function errorCallback(unauthtorizedCallback, notFoundCallback, jhr, status, err
   }
   console.log('error - jhr %s, status - %s, error - %s', jhr, status, error);
 }
+
 function renderSearchBar(data) {
   console.log('renderSearchBar');
   dust.render('searchBarTemplate', data, appendSearchBar);
 
 }
+
 function initSearchBar() {
   $('[role="main"] .bins-search_bar').remove();
   var target = $('div[role="main"]');
