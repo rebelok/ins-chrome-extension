@@ -2,10 +2,11 @@
 
 $padding: 8px;
 $color-border: #e0e6e8;
+$color: #222;
 
 .bins-side_bar, .bins-search_bar {
   font: 16px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #222;
+  color: $color;
 }
 
 .bins-footer {
@@ -48,7 +49,7 @@ $color-border: #e0e6e8;
 .bins-h2 {
   font-size: 18px;
   font-weight: normal;
-  color: #222;
+  color: $color;
   margin: 0 0 5px;
   padding: 5px;
 }
@@ -108,7 +109,7 @@ $color-border: #e0e6e8;
 }
 
 .bins-link:hover {
-  color: #222;
+  color: $color;
 }
 
 .bins-connections_title {
@@ -192,7 +193,7 @@ padding-right: 5px;
 
 .bins-search_bar {
   position: relative;
-  color: #222;
+  color: $color;
   background-color: rgba(255, 255, 255, .9);
   font-size: 13px;
 
