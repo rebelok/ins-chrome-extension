@@ -24,7 +24,12 @@ $color: #222;
   border-radius: 100%;
 }
 
-.bins-person .bins-avatar_img {
+.bins-person {
+  display: inline-block;
+}
+
+.bins-avatar_img--person {
+  @extend .bins-avatar_img;
   width: 50px;
   height: 50px;
 }
@@ -201,14 +206,14 @@ padding-right: 5px;
     margin: 0 $padding;
     min-width: 219px;
 
-    .bins-guser &{
+    .bins-guser & {
       min-width: 227px;
     }
   }
-  .bins-person__avatar{
+  .bins-person__avatar {
     margin: 0 0 0 $padding;
 
-    .bins-guser &{
+    .bins-guser & {
       margin: 0;
     }
   }
@@ -263,20 +268,25 @@ padding-right: 5px;
 
 .bins-button {
   box-shadow: 0 1px 0 rgba(0, 0, 0, .05);
-  background-color: #fff;
-  color: #404040;
-  border: 1px solid #d4d4d4;
+  background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+  color: #444;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 2px;
   padding-right: 5px;
   padding-left: 5px;
   text-align: left;
   display: inline-block;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 11px;
   cursor: pointer;
+  height: 16px;
+  line-height: 16px;
 }
 
 .bins-button_invite {
   margin: 0 0 5px $padding;
 }
+
+
 
 

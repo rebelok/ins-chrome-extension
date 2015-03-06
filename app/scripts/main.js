@@ -15,7 +15,6 @@ var gmail, $, IsRapportiveInstalled;
 var sideBarTemplate = '<div class="bins-side_bar"></div>',
   disabledButtonClass = 'bins-button__disabled';
 
-
 function main() {
   try {
     $ = jQuery.noConflict();
@@ -289,7 +288,7 @@ var fullSideBarTemplate = '{#Person}\
   <div class="bins-person">\
   <div class="bins-avatar">\
     <a class="bins-person_link" href="{Link}">\
-      <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+      <img class="bins-avatar_img--person {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
     </a>\
     </div>\
     {?.Position}\
