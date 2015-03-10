@@ -286,27 +286,36 @@ var fullSideBarTemplate = '{#Person}\
     </h2>\
   </div>\
   <div class="bins-person">\
-  <div class="bins-avatar">\
-    <a class="bins-person_link" href="{Link}">\
-      <img class="bins-avatar_img--person {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
-    </a>\
+    <div class="bins-avatar">\
+      <a class="bins-person_link" href="{Link}">\
+        <img class="bins-avatar_img--person {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+      </a>\
     </div>\
-    {?.Position}\
-      <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
-    {/.Position}\
-  </div>\
-  <div class="bins-position">\
-    {?.CompanyName}\
-      <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
-    {/.CompanyName}\
-  </div>\
-  {?.InvitationsStatus}\
-      <div class="bins-invite">Invitation sent</div>\
-    {:else}\
-      {?.CanInvite}\
-        <div class="bins-button bins-button_invite" data-email="{Emails[0]}">Invite</div>\
-      {/.CanInvite}\
-    {/.InvitationsStatus}\
+    <div class="bins-person_details">\
+      {?.Position}\
+        <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
+      {/.Position}\
+      <div class="bins-position">\
+        {?.CompanyName}\
+          <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
+        {/.CompanyName}\
+      </div>\
+      {?.InvitationsStatus}\
+          <div class="bins-invite">Invitation sent</div>\
+        {:else}\
+          {?.CanInvite}\
+            <div class="bins-invite">\
+              <span class="bins-invite_text">\
+                Invite this person to Insightful to share your contacts\
+              </span>\
+              <div class="bins-button bins-button_invite" data-email="{Emails[0]}">\
+                Invite\
+              </div>\
+            </div>\
+          {/.CanInvite}\
+        {/.InvitationsStatus}\
+    </div>\
+</div>\
     {?.Emails}\
     <div class="bins-email">\
       {#Emails}\
