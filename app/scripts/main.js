@@ -13,7 +13,8 @@ function refresh(f) {
 
 var gmail, $, IsRapportiveInstalled;
 var sideBarTemplate = '<div class="bins-side_bar"></div>',
-  disabledButtonClass = 'bins-button__disabled';
+  disabledButtonClass = 'bins-button__disabled',
+  inviteUrl = 'https://cloud.insightfulinc.com:8443/Invite/People';
 
 function main() {
   try {
@@ -35,6 +36,7 @@ function init() {
   initSearchDetection();
   initDefaultState();
   initEvents();
+  initInviteButton();
 }
 
 function initEvents() {
@@ -150,6 +152,16 @@ function initSideBar() {
   $('.adC[role="complementary"]').children().first().prepend(sideBarTemplate);
 }
 
+function initInviteButton() {
+  addToolbarInvite();
+  gmail.observe.on("send_message", addToolbarInvite);
+  function addToolbarInvite() {
+    gmail.tools.add_toolbar_button('Invite people to Insightful', function () {
+      window.open(inviteUrl, '_blank');
+    });
+  }
+}
+
 function sendInvite() {
   var $this = $(this);
   var invDiv = $('<div class="bins-invite">Invitation sent</div>');
@@ -188,6 +200,9 @@ function requestData(email, callback, errorCallback) {
     .done(callback)
     .fail(errorCallback)
     .always(function (data) {
+      if (data.Person) {
+        data.Person.IsDirect = data.Person.Proximity === 1;
+      }
       console.log('done');
       console.log(data)
     });
@@ -211,7 +226,7 @@ function errorCallback(unauthtorizedCallback, notFoundCallback, jhr, status, err
   if (jhr.status === 401) {
     unauthtorizedCallback('401', '<div class="bins-footer"> Please, login to load additional information about contact <nobr>from <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Isightful</a>.</nobr></div> ');
   } else if (jhr.status === 404 && this) {
-    notFoundCallback('404', '<div class="bins-footer"><div class="bins-button bins-button_invite" data-email="' + this + '">Invite</div><a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a></div>');
+    notFoundCallback('404', '<div class="bins-footer"> <span class="bins-invite_text">Invite this person to Insightful to share your contacts</span>&nbsp;&nbsp;<div class="bins-button bins-button_invite" data-email="' + this + '">Invite</div>&nbsp;&nbsp;<a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a></div>');
   }
   console.log('error - jhr %s, status - %s, error - %s', jhr, status, error);
 }
@@ -326,7 +341,11 @@ var fullSideBarTemplate = '{#Person}\
   {/.Emails}\
   {?.Connections}\
     <div class="bins-connections_title">\
-      Connections\
+      {?.IsDirect}\
+      Shared contacts\
+      {:else}\
+      You know this person through\
+      {/IsDirect}\
     </div>\
     <ul class="bins-connections_list">\
       {#Connections}\

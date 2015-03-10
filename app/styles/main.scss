@@ -284,6 +284,27 @@ padding-right: 5px;
 }
 
 .bins-button_invite {
+  font-style: normal;
+  margin:5px 0;
+}
+
+.bins-invite_people{
+  background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #444;
+  display: inline-block;
+  border-radius: 2px;
+  cursor: default;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  margin-right: 16px;
+  height: 27px;
+  line-height: 27px;
+  min-width: 54px;
+  outline: 0;
+  padding: 0 8px;
 }
 
 
