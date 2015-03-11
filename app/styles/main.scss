@@ -187,8 +187,13 @@ padding-right: 5px;
 .bins-search_bar__content {
   min-height: 55px;
   padding: $padding 0;
-  margin: $padding 0;
+  margin: $padding 75px $padding 0;
   display: flex;
+  border-top: 1px solid #ccc;
+
+  &:first-of-type{
+    border:none;
+  }
 }
 
 .bins-person__avatar .bins-avatar_img {
@@ -251,6 +256,9 @@ padding-right: 5px;
   }
   .bins-connections {
     margin: 0 20px 0 0;
+    min-width: 204px;
+
+
   }
   .bins-connections_title {
     line-height: 12px;

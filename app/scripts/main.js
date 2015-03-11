@@ -22,6 +22,8 @@ function main() {
     gmail = new Gmail($);
     console.log('Hello, ', gmail.get.user_email());
     init();
+    console.log('init pass');
+
     detectRapportive();
   } catch (e) {
     console.log(e);
@@ -32,6 +34,8 @@ refresh(main);
 
 function init() {
   compileTemplates();
+  console.log('compile pass');
+
   initObservations();
   initSearchDetection();
   initDefaultState();
@@ -362,23 +366,24 @@ var fullSideBarTemplate = '{#Person}\
   {/.Connections}\
 {/Person}';
 
-var searchBarTemplate = '{#Person} \
-<a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
-<div class="bins-search_bar__content">\
-    <div class="bins-person__avatar">\
-      <a class="bins-person_link" href="{Link}">\
-        <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
-      </a>\
-    </div>\
-  <div class="bins-person">\
-    <h2 class="bins-h2 bins-h2-name">\
-      <a class="bins-person_link" href="{Link}">{FirstName} {LastName}</a>\
-    </h2>\
-    <div class="bins-position">\
-      <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
-      <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
-    </div>\
-  </div>\
+var searchBarTemplate = '{#.}\
+  <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
+    {#Persons} \
+      <div class="bins-search_bar__content">\
+        <div class="bins-person__avatar">\
+          <a class="bins-person_link" href="{Link}">\
+            <img class="bins-avatar_img {Color}" src="{AvatarUrl}" alt="{FirstName} {LastName}"/>\
+          </a>\
+        </div>\
+      <div class="bins-person">\
+        <h2 class="bins-h2 bins-h2-name">\
+          <a class="bins-person_link" href="{Link}">{FirstName} {LastName}</a>\
+        </h2>\
+        <div class="bins-position">\
+          <h2 class="bins-h2 bins-h2-position">{Position}</h2>\
+          <a class="bins-company_link" href="{CompanyLink}">{CompanyName}</a>\
+        </div>\
+      </div>\
   <div class="bins-contacts">\
    {?.Emails}\
     <div class="bins-email">\
@@ -411,8 +416,8 @@ var searchBarTemplate = '{#Person} \
     </ul>\
   </div>\
 {/.Connections}\
-</div>\
- {/Person}';
+</div>{~n}{/Persons}\
+{/.}';
 
 var simpleSideBarTemplate = '{#Person} \
   {?.Connections}\
