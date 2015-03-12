@@ -157,12 +157,14 @@ function initSideBar() {
 }
 
 function initInviteButton() {
-  addToolbarInvite();
-  gmail.observe.on("send_message", addToolbarInvite);
+  var inviteAllChecker = setInterval(addToolbarInvite, 500);
+
   function addToolbarInvite() {
-    gmail.tools.add_toolbar_button('Invite people to Insightful', function () {
-      window.open(inviteUrl, '_blank');
-    });
+    if ($('[id=":5"]').children(':visible').find('.bins-invite-all').length === 0) {
+      gmail.tools.add_toolbar_button('Invite people to Insightful<i class="bins-invite-all"></i>', function () {
+        window.open(inviteUrl, '_blank');
+      });
+    }
   }
 }
 
@@ -204,8 +206,8 @@ function requestData(email, callback, errorCallback) {
     .done(callback)
     .fail(errorCallback)
     .always(function (data) {
-      if (data.Person) {
-        data.Person.IsDirect = data.Person.Proximity === 1;
+      if (data.Persons) {
+        data.Persons.forEach(function(elem){elem.IsDirect = elem.Proximity === 1;});
       }
       console.log('done');
       console.log(data)
@@ -298,7 +300,7 @@ function compileTemplates() {
   dust.loadSource(compiledSearchBarTemplate);
 }
 
-var fullSideBarTemplate = '{#Person}\
+var fullSideBarTemplate = '{#Persons[0]}\
   <div class="bins-name">\
     <h2 class="bins-h2 bins-h2-name">\
       <a class="bins-person_link" href="{Link}">{FirstName} {LastName}</a>\
@@ -364,7 +366,7 @@ var fullSideBarTemplate = '{#Person}\
       <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
     </div>\
   {/.Connections}\
-{/Person}';
+{/Persons[0]}';
 
 var searchBarTemplate = '{#.}\
   <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
@@ -419,7 +421,7 @@ var searchBarTemplate = '{#.}\
 </div>{~n}{/Persons}\
 {/.}';
 
-var simpleSideBarTemplate = '{#Person} \
+var simpleSideBarTemplate = '{#Persons[0]} \
   {?.Connections}\
 <div class="bins-connections_title">\
 Connections\
@@ -445,4 +447,4 @@ Connections\
       {/.InvitationsStatus}\
       <a class="bins-link bins-site_link" href="http://cloud.insightfulinc.com">Insightful</a>\
     </div>\
-{/Person}';
+{/Persons[0]}';

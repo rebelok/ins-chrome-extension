@@ -1,8 +1,10 @@
 {
     "name": "Insightful",
     "description": "Find the right people at the right time!",
-    "version": "0.0.34",
+    "version": "0.0.35",
     "manifest_version": 2,
+    "homepage_url": "http://cloud.insightfulinc.com",
+    "short_name": "Find the right people at the right time!",
     "icons": {
         "16": "images/ins16.png",
         "128": "images/ins128.png"
